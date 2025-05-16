@@ -4,10 +4,23 @@ import { CommonModule } from '@angular/common';
 import { TodoService } from '../todo.service';
 import { Todo } from '../todo.model';
 
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatListModule } from '@angular/material/list';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
 @Component({
   selector: 'app-todo-list',
   standalone: true,
-  imports: [FormsModule, CommonModule], // 加入 imports
+  imports: [FormsModule,
+    CommonModule,
+    MatInputModule,
+    MatButtonModule,
+    MatListModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatFormFieldModule], // 加入 imports
   templateUrl: './todo-list.component.html',
 })
 export class TodoListComponent implements OnInit {

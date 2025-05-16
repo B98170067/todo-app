@@ -1,16 +1,23 @@
-<h1>我的待辦清單</h1>
+<h1>📋 我的待辦清單</h1>
 
-<div>
-  <input [(ngModel)]="newTitle" placeholder="新增待辦事項" />
-  <button (click)="addTodo()">新增</button>
-</div>
+<mat-form-field appearance="fill" style="width: 100%;">
+  <mat-label>新增待辦事項</mat-label>
+  <input matInput [(ngModel)]="newTitle" (keyup.enter)="addTodo()" />
+</mat-form-field>
 
-<ul>
-  <li *ngFor="let todo of todos">
-    <input type="checkbox" [checked]="todo.completed" (change)="toggleCompleted(todo)" />
-    <span [style.text-decoration]="todo.completed ? 'line-through' : 'none'">
+<button mat-raised-button color="primary" (click)="addTodo()">新增</button>
+
+<mat-list>
+  <mat-list-item *ngFor="let todo of todos">
+    <mat-checkbox [checked]="todo.completed" (change)="toggleCompleted(todo)">
+    </mat-checkbox>
+
+    <span style="flex: 1; margin-left: 10px;" [style.text-decoration]="todo.completed ? 'line-through' : 'none'">
       {{ todo.title }}
     </span>
-    <button (click)="deleteTodo(todo.id)">刪除</button>
-  </li>
-</ul>
+
+    <button mat-icon-button color="warn" (click)="deleteTodo(todo.id)">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-list-item>
+</mat-list>
