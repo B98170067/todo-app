@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms'; // 匯入 FormsModule
+import { CommonModule } from '@angular/common';
 import { TodoService } from '../todo.service';
 import { Todo } from '../todo.model';
 
 @Component({
   selector: 'app-todo-list',
+  standalone: true,
+  imports: [FormsModule, CommonModule], // 加入 imports
   templateUrl: './todo-list.component.html',
 })
 export class TodoListComponent implements OnInit {
