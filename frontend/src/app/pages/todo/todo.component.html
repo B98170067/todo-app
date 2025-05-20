@@ -16,10 +16,19 @@
   </div>
 </div>
 
+<!-- 篩選控制 -->
+<div style="max-width: 600px; margin: 0 auto 16px auto; text-align: right; padding: 0 16px;">
+  <mat-button-toggle-group [(ngModel)]="filter" aria-label="Filter todos">
+    <mat-button-toggle value="all">全部</mat-button-toggle>
+    <mat-button-toggle value="active">未完成</mat-button-toggle>
+    <mat-button-toggle value="completed">已完成</mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+
 <!-- 待辦清單 -->
 <div style="max-width: 600px; margin: 0 auto; padding: 0 16px;">
   <mat-list>
-    <mat-list-item *ngFor="let todo of todos" style="align-items: center;">
+    <mat-list-item *ngFor="let todo of filteredTodos()" style="align-items: center;">
       <mat-checkbox [checked]="todo.completed" (change)="toggleCompleted(todo)">
       </mat-checkbox>
 

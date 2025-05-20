@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { NavbarComponent } from '../../components/navbar/navbar.component'; // 匯入 navbar component
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { EditTodoDialogComponent } from '../../components/edit-todo-dialog/edit-todo-dialog.component'; // 新增
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-todo-list',
@@ -27,12 +28,14 @@ import { EditTodoDialogComponent } from '../../components/edit-todo-dialog/edit-
     MatFormFieldModule,
     NavbarComponent,
     MatDialogModule,
-    EditTodoDialogComponent], // 加入 imports
+    EditTodoDialogComponent,
+    MatButtonToggleModule], // 加入 imports
   templateUrl: './todo.component.html',
 })
 export class TodoListComponent implements OnInit {
   todos: Todo[] = [];
   newTitle = '';
+  filter: 'all' | 'completed' | 'active' = 'all';
 
   constructor(private todoService: TodoService, private dialog: MatDialog) { }
 
@@ -81,5 +84,14 @@ export class TodoListComponent implements OnInit {
         });
       }
     });
+  }
+
+  filteredTodos(): Todo[] {
+    if (this.filter === 'completed') {
+      return this.todos.filter(t => t.completed);
+    } else if (this.filter === 'active') {
+      return this.todos.filter(t => !t.completed);
+    }
+    return this.todos;
   }
 }
