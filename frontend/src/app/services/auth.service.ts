@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap, catchError, of, BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthService {
-  private api = 'http://localhost:3000/auth';
+  private apiUrl = `${environment.apiUrl}/auth`;
 
   private userSubject = new BehaviorSubject<string | null>(this.getStoredUsername());
 
@@ -20,7 +22,7 @@ export class AuthService {
   }
 
   login(username: string, password: string) {
-    return this.http.post<{ token: string; username: string }>(`${this.api}/login`, { username, password }).pipe(
+    return this.http.post<{ token: string; username: string }>(`${this.apiUrl}/login`, { username, password }).pipe(
       tap(res => {
         localStorage.setItem('auth', res.token);
         localStorage.setItem('username', username);
@@ -34,7 +36,7 @@ export class AuthService {
   }
 
   register(username: string, password: string) {
-    return this.http.post(`${this.api}/register`, { username, password }).pipe(
+    return this.http.post(`${this.apiUrl}/register`, { username, password }).pipe(
       catchError(() => {
         alert('註冊失敗');
         return of(null);
