@@ -1,53 +1,69 @@
 import express from 'express';
 import Todo from '../models/todo.js';
-import authenticateToken from '../middleware/auth.js';
+import authenticate from '../middleware/authenticate.js';
 
 const router = express.Router();
 
-router.use(authenticateToken);
+// 所有 API 都加上驗證
+router.use(authenticate);
 
+// 取得該使用者的 todo
 router.get('/', async (req, res) => {
     try {
-        const todos = await Todo.find();
+        const todos = await Todo.find({ userId: req.user.id });
         res.json(todos);
     } catch {
         res.status(500).json({ message: 'Failed to fetch todos' });
     }
 });
 
+// 新增 todo，userId 從登入者身分給定
 router.post('/', async (req, res) => {
-    try {
-        const { title } = req.body;
-        const newTodo = new Todo({ title });
+    try { 
+        const newTodo  = new Todo({
+            title: req.body.title,
+            completed: req.body.completed ?? false,
+            userId: req.user.id
+        });
         await newTodo.save();
         res.status(201).json(newTodo);
-    } catch {
+    } catch(error) {
+        console.log(error);
         res.status(500).json({ message: 'Failed to create todos' });
     }
 });
 
+// 修改 todo（只能修改自己的）
 router.put('/:id', async (req, res) => {
-    const { id } = req.params;
-    const { title, completed } = req.body;
-    try {
-        const updatedTodo = await Todo.findByIdAndUpdate(
-            id,
-            { $set: { title, completed } },
+    try { 
+        const updatedTodo = await Todo.findOneAndUpdate(
+            { _id: req.params.id, userId: req.user.id },
+            req.body,
             { new: true }
         );
-        if (updatedTodo) {
-            res.json(updatedTodo);
-        } else {
-            res.status(404).json({ message: 'Todo not found' });
+
+        if (!updatedTodo) {
+            return res.status(404).json({ message: 'Todo not found or not yours' });
         }
+
+        res.json(updatedTodo);
     } catch {
         res.status(400).json({ message: 'Invalid ID' });
     }
 });
 
+// 刪除 todo（只能刪除自己的）
 router.delete('/:id', async (req, res) => {
     try {
-        await Todo.findByIdAndDelete(req.params.id);
+        const deletedTodo = await Todo.findOneAndDelete({
+            _id: req.params.id,
+            userId: req.user.id 
+        });
+
+        if (!deletedTodo) {
+            return res.status(404).json({ message: 'Todo not found or not yours' });
+        }
+
         res.status(204).send();
     } catch {
         res.status(400).json({ message: 'Invalid ID' });
