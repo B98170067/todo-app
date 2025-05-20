@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms'; // 匯入 FormsModule
 import { CommonModule } from '@angular/common';
-import { TodoService } from '../todo.service';
-import { Todo } from '../todo.model';
+import { TodoService } from '../../services/todo.service';
+import { Todo } from '../../models/todo.model';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,7 +10,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { NavbarComponent } from '../navbar/navbar.component'; // 匯入 navbar component
+import { NavbarComponent } from '../../components/navbar/navbar.component'; // 匯入 navbar component
 
 @Component({
   selector: 'app-todo-list',
@@ -24,7 +24,7 @@ import { NavbarComponent } from '../navbar/navbar.component'; // 匯入 navbar c
     MatIconModule,
     MatFormFieldModule,
     NavbarComponent], // 加入 imports
-  templateUrl: './todo-list.component.html',
+  templateUrl: './todo.component.html',
 })
 export class TodoListComponent implements OnInit {
   todos: Todo[] = [];

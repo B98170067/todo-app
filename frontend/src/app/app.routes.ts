@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
-import { AuthGuard } from './auth.guard';
-import { TodoListComponent } from './todo-list/todo-list.component'; // 假設這是主要頁面
+import { AuthGuard } from './guards/auth.guard';
+import { TodoListComponent } from './pages/todo/todo.component'; // 假設這是主要頁面
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
