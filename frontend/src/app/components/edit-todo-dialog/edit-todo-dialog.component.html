@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>編輯待辦事項</h1>
+<div mat-dialog-content>
+  <mat-form-field style="width: 100%;">
+    <input matInput [(ngModel)]="data.title" />
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">取消</button>
+  <button mat-raised-button color="primary" (click)="onSave()">儲存</button>
+</div>

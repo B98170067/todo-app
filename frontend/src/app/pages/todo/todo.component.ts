@@ -11,6 +11,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { NavbarComponent } from '../../components/navbar/navbar.component'; // 匯入 navbar component
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { EditTodoDialogComponent } from '../../components/edit-todo-dialog/edit-todo-dialog.component'; // 新增
 
 @Component({
   selector: 'app-todo-list',
@@ -23,14 +25,16 @@ import { NavbarComponent } from '../../components/navbar/navbar.component'; // �
     MatCheckboxModule,
     MatIconModule,
     MatFormFieldModule,
-    NavbarComponent], // 加入 imports
+    NavbarComponent,
+    MatDialogModule,
+    EditTodoDialogComponent], // 加入 imports
   templateUrl: './todo.component.html',
 })
 export class TodoListComponent implements OnInit {
   todos: Todo[] = [];
   newTitle = '';
 
-  constructor(private todoService: TodoService) { }
+  constructor(private todoService: TodoService, private dialog: MatDialog) { }
 
   ngOnInit() {
     this.loadTodos();
@@ -60,6 +64,22 @@ export class TodoListComponent implements OnInit {
   deleteTodo(id: string) {
     this.todoService.deleteTodo(id).subscribe(() => {
       this.todos = this.todos.filter(t => t._id !== id);
+    });
+  }
+
+  editTodo(todo: Todo): void {
+    const dialogRef = this.dialog.open(EditTodoDialogComponent, {
+      width: '300px',
+      data: { title: todo.title }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined && result !== todo.title) {
+        const updated = { ...todo, title: result };
+        this.todoService.updateTodo(updated).subscribe(res => {
+          todo.title = res.title;
+        });
+      }
     });
   }
 }

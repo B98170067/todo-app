@@ -27,6 +27,9 @@
         {{ todo.title }}
       </span>
 
+      <button mat-icon-button color="accent" (click)="editTodo(todo)" aria-label="編輯待辦">
+        <mat-icon>edit</mat-icon>
+      </button>
       <button mat-icon-button color="warn" (click)="deleteTodo(todo._id)" aria-label="刪除待辦">
         <mat-icon>delete</mat-icon>
       </button>
