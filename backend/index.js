@@ -2,6 +2,12 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+
+// 使用 dotenv 套件來讀取 .env 檔案中的環境變數
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 const port = 3000;
@@ -21,6 +27,62 @@ mongoose.connect('mongodb://admin:7ujm*IK<@localhost:27017/todosdb?authSource=ad
     console.error('MongoDB connection error:', err);
 });
 
+// 定義 User 模型
+const userSchema = new mongoose.Schema({
+    username: { type: String, unique: true, required: true },
+    password: { type: String, required: true }
+});
+
+userSchema.pre('save', async function (next) {
+    if (this.isModified('password')) {
+        this.password = await bcrypt.hash(this.password, 10);
+    }
+    next();
+});
+
+const User = mongoose.model('User', userSchema);
+
+// JWT 驗證中介軟體
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) return res.sendStatus(401);
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403);
+        req.user = user;
+        next();
+    });
+};
+
+// 註冊
+app.post('/register', async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        const user = new User({ username, password });
+        await user.save();
+        res.status(201).json({ message: 'User registered' });
+    } catch (err) {
+        res.status(400).json({ message: 'User already exists' });
+    }
+});
+
+// 登入
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    const token = jwt.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET, {
+        expiresIn: '1h'
+    });
+
+    res.json({ token });
+});
+
 // 定義 Todo 模型
 const todoSchema = new mongoose.Schema({
     title: { type: String, required: true },
@@ -30,13 +92,13 @@ const todoSchema = new mongoose.Schema({
 const Todo = mongoose.model('Todo', todoSchema);
 
 // 取得所有代辦事項
-app.get('/todos', async (req, res) => {
+app.get('/todos', authenticateToken, async (req, res) => {
     const todos = await Todo.find();
     res.json(todos);
 });
 
 // 新增代辦事項
-app.post('/todos', async (req, res) => {
+app.post('/todos', authenticateToken, async (req, res) => {
     const { title } = req.body;
     const newTodo = new Todo({ title });
     await newTodo.save();
@@ -44,7 +106,7 @@ app.post('/todos', async (req, res) => {
 });
 
 // 更新代辦事項
-app.put('/todos/:id', async (req, res) => {
+app.put('/todos/:id', authenticateToken, async (req, res) => {
     const { id } = req.params;
     const { title, completed } = req.body;
 
@@ -66,7 +128,7 @@ app.put('/todos/:id', async (req, res) => {
 });
 
 // 刪除代辦事項
-app.delete('/todos/:id', async (req, res) => {
+app.delete('/todos/:id', authenticateToken, async (req, res) => {
     try {
         await Todo.findByIdAndDelete(req.params.id);
         res.status(204).send();
