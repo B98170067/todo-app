@@ -10,6 +10,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { NavbarComponent } from '../navbar/navbar.component'; // 匯入 navbar component
+
 @Component({
   selector: 'app-todo-list',
   standalone: true,
@@ -20,7 +22,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatListModule,
     MatCheckboxModule,
     MatIconModule,
-    MatFormFieldModule], // 加入 imports
+    MatFormFieldModule,
+    NavbarComponent], // 加入 imports
   templateUrl: './todo-list.component.html',
 })
 export class TodoListComponent implements OnInit {

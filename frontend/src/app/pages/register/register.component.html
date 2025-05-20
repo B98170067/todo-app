@@ -1,0 +1,48 @@
+<h2 style="text-align: center; margin-bottom: 24px;">📝 註冊</h2>
+
+<form [formGroup]="form" (ngSubmit)="onRegister()" style="max-width: 400px; margin: auto;">
+  <!-- 使用者名稱 -->
+  <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 16px;">
+    <mat-label>使用者名稱</mat-label>
+    <input matInput formControlName="username" autocomplete="username" />
+    <mat-error *ngIf="form.get('username')?.invalid && form.get('username')?.touched">
+      請輸入使用者名稱
+    </mat-error>
+  </mat-form-field>
+
+  <!-- 密碼 -->
+  <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 24px;">
+    <mat-label>密碼</mat-label>
+    <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password"
+      autocomplete="new-password" />
+    <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button" [attr.aria-label]="'切換密碼可見性'">
+      <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+    </button>
+    <mat-error *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
+      請輸入密碼
+    </mat-error>
+  </mat-form-field>
+
+  <!-- 確認密碼 -->
+  <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 24px;">
+    <mat-label>確認密碼</mat-label>
+    <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="confirmPassword"
+      autocomplete="new-password" />
+    <mat-error *ngIf="form.hasError('passwordMismatch') && form.get('confirmPassword')?.touched">
+      密碼與確認密碼不一致
+    </mat-error>
+  </mat-form-field>
+
+  <!-- 註冊按鈕 + loading spinner -->
+  <div style="position: relative;">
+    <button mat-raised-button color="primary" type="submit" style="width: 100%;" [disabled]="form.invalid || loading">
+      註冊
+    </button>
+    <mat-progress-spinner *ngIf="loading" diameter="24" mode="indeterminate" color="accent"
+      style="position: absolute; top: 50%; right: 16px; transform: translateY(-50%);"></mat-progress-spinner>
+  </div>
+</form>
+
+<p style="text-align: center; margin-top: 16px;">
+  已有帳號？<a routerLink="/login">登入</a>
+</p>

@@ -1,0 +1,44 @@
+<h2 style="text-align: center; margin-bottom: 24px;">🔐 登入</h2>
+
+<form [formGroup]="form" (ngSubmit)="onLogin()" style="max-width: 400px; margin: auto;">
+  <!-- 使用者名稱 -->
+  <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 16px;">
+    <mat-label>使用者名稱</mat-label>
+    <input matInput formControlName="username" autocomplete="username" />
+    <mat-error *ngIf="form.get('username')?.invalid && form.get('username')?.touched">
+      請輸入使用者名稱
+    </mat-error>
+  </mat-form-field>
+
+  <!-- 密碼 -->
+  <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 24px;">
+    <mat-label>密碼</mat-label>
+    <input
+      matInput
+      [type]="hidePassword ? 'password' : 'text'"
+      formControlName="password"
+      autocomplete="current-password"
+    />
+    <button
+      mat-icon-button
+      matSuffix
+      (click)="togglePasswordVisibility()"
+      type="button"
+      [attr.aria-label]="'切換密碼可見性'"
+    >
+      <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+    </button>
+    <mat-error *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
+      請輸入密碼
+    </mat-error>
+  </mat-form-field>
+
+  <!-- 登入按鈕 -->
+  <button mat-raised-button color="primary" type="submit" style="width: 100%;" [disabled]="form.invalid">
+    登入
+  </button>
+</form>
+
+<p style="text-align: center; margin-top: 16px;">
+  沒有帳號？<a routerLink="/register">註冊</a>
+</p>

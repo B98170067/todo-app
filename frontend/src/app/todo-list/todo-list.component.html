@@ -1,23 +1,35 @@
-<h1>📋 我的待辦清單</h1>
+<!-- 標題 -->
+<h1 style="text-align: center; margin-top: 24px; font-weight: 500;">📋 我的待辦清單</h1>
 
-<mat-form-field appearance="fill" style="width: 100%;">
-  <mat-label>新增待辦事項</mat-label>
-  <input matInput [(ngModel)]="newTitle" (keyup.enter)="addTodo()" />
-</mat-form-field>
+<!-- 導覽列 -->
+<app-navbar />
 
-<button mat-raised-button color="primary" (click)="addTodo()">新增</button>
+<!-- 輸入框區塊 -->
+<div style="max-width: 600px; margin: 0 auto 32px auto; padding: 0 16px;">
+  <mat-form-field appearance="fill" style="width: 100%;">
+    <mat-label>新增待辦事項</mat-label>
+    <input matInput [(ngModel)]="newTitle" (keyup.enter)="addTodo()" />
+  </mat-form-field>
 
-<mat-list>
-  <mat-list-item *ngFor="let todo of todos">
-    <mat-checkbox [checked]="todo.completed" (change)="toggleCompleted(todo)">
-    </mat-checkbox>
+  <div style="text-align: right; margin-top: 8px;">
+    <button mat-raised-button color="primary" (click)="addTodo()">新增</button>
+  </div>
+</div>
 
-    <span style="flex: 1; margin-left: 10px;" [style.text-decoration]="todo.completed ? 'line-through' : 'none'">
-      {{ todo.title }}
-    </span>
+<!-- 待辦清單 -->
+<div style="max-width: 600px; margin: 0 auto; padding: 0 16px;">
+  <mat-list>
+    <mat-list-item *ngFor="let todo of todos" style="align-items: center;">
+      <mat-checkbox [checked]="todo.completed" (change)="toggleCompleted(todo)">
+      </mat-checkbox>
 
-    <button mat-icon-button color="warn" (click)="deleteTodo(todo._id)">
-      <mat-icon>delete</mat-icon>
-    </button>
-  </mat-list-item>
-</mat-list>
+      <span style="flex: 1; margin-left: 10px;" [style.text-decoration]="todo.completed ? 'line-through' : 'none'">
+        {{ todo.title }}
+      </span>
+
+      <button mat-icon-button color="warn" (click)="deleteTodo(todo._id)" aria-label="刪除待辦">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-list-item>
+  </mat-list>
+</div>
