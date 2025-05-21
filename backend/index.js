@@ -5,9 +5,15 @@ import connectDB from './config/db.js';
 import authRoutes from './routes/auth.js';
 import todoRoutes from './routes/todos.js';
 
-// 使用 dotenv 套件來讀取 .env 檔案中的環境變數
+// 使用 dotenv 套件根據 NODE_ENV 載入對應的 .env 檔
 import dotenv from 'dotenv';
-dotenv.config();
+import { fileURLToPath } from 'url';
+import path from 'path';
+// ESM 環境中模擬 __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const env = process.env.NODE_ENV || 'development';
+dotenv.config({ path: path.resolve(__dirname, `.env.${env}`) });
 
 const app = express();
 const port = 3000;
