@@ -6,8 +6,36 @@ const router = express.Router();
 
 // 所有 API 都加上驗證
 router.use(authenticate);
+ 
+/**
+ * @swagger
+ * tags:
+ *   name: Todos
+ *   description: Todo CRUD
+ */
 
-// 取得該使用者的 todo
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+ 
+/**
+ * @swagger
+ * /todos:
+ *   get:
+ *     summary: 取得該登入者的 todo
+ *     tags: [Todos]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: 成功回傳 Todo 清單
+ */
 router.get('/', async (req, res) => {
     try {
         const todos = await Todo.find({ userId: req.user.id });
@@ -17,7 +45,29 @@ router.get('/', async (req, res) => {
     }
 });
 
-// 新增 todo，userId 從登入者身分給定
+/**
+ * @swagger
+ * /todos:
+ *   post:
+ *     summary: 新增 todo，userId 從登入者身分給定
+ *     tags: [Todos]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *             properties:
+ *               title:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: 建立成功
+ */
 router.post('/', async (req, res) => {
     try { 
         const newTodo  = new Todo({
@@ -32,8 +82,38 @@ router.post('/', async (req, res) => {
         res.status(500).json({ message: 'Failed to create todos' });
     }
 });
-
-// 修改 todo（只能修改自己的）
+ 
+/**
+ * @swagger
+ * /todos/{id}:
+ *   put:
+ *     summary: 修改指定 Todo（只能修改自己的）
+ *     tags: [Todos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               completed:
+ *                 type: boolean
+ *     responses:
+ *       200:
+ *         description: 修改成功
+ *       404:
+ *         description: 找不到
+ */
 router.put('/:id', async (req, res) => {
     try { 
         const updatedTodo = await Todo.findOneAndUpdate(
@@ -51,8 +131,27 @@ router.put('/:id', async (req, res) => {
         res.status(400).json({ message: 'Invalid ID' });
     }
 });
-
-// 刪除 todo（只能刪除自己的）
+ 
+/**
+ * @swagger
+ * /todos/{id}:
+ *   delete:
+ *     summary: 刪除指定 Todo（只能刪除自己的）
+ *     tags: [Todos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: 刪除成功
+ *       404:
+ *         description: 找不到
+ */
 router.delete('/:id', async (req, res) => {
     try {
         const deletedTodo = await Todo.findOneAndDelete({

@@ -20,7 +20,9 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "lowdb": "^7.0.1",
-    "mongoose": "^8.15.0"
+    "mongoose": "^8.15.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "cross-env": "^7.0.3"

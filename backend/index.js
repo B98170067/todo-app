@@ -4,7 +4,8 @@ import cors from 'cors';
 import connectDB from './config/db.js';
 import authRoutes from './routes/auth.js';
 import todoRoutes from './routes/todos.js';
-
+import { setupSwagger } from './swagger.js';
+ 
 // 使用 dotenv 套件根據 NODE_ENV 載入對應的 .env 檔
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
@@ -16,7 +17,7 @@ const env = process.env.NODE_ENV || 'development';
 dotenv.config({ path: path.resolve(__dirname, `.env.${env}`) });
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 connectDB();
 
@@ -27,6 +28,9 @@ app.use(bodyParser.json());
 
 app.use('/auth', authRoutes);
 app.use('/todos', todoRoutes);
+
+// Swagger 文件
+setupSwagger(app);
 
 // 啟動伺服器
 app.listen(port, () => {
