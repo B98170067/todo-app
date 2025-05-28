@@ -1,0 +1,15 @@
+.upload-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.snack-success {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.snack-error {
+  background-color: #f44336;
+  color: #fff;
+}

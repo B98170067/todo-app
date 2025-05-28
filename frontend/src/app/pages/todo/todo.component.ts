@@ -14,6 +14,7 @@ import { NavbarComponent } from '../../components/navbar/navbar.component'; // �
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { EditTodoDialogComponent } from '../../components/edit-todo-dialog/edit-todo-dialog.component'; // 新增
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { FileUploadComponent } from '../../components/file-upload/file-upload.component';
 
 @Component({
   selector: 'app-todo-list',
@@ -29,6 +30,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     NavbarComponent,
     MatDialogModule,
     EditTodoDialogComponent,
+    FileUploadComponent,
     MatButtonToggleModule], // 加入 imports
   templateUrl: './todo.component.html',
 })

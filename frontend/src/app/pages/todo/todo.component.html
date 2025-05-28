@@ -28,20 +28,33 @@
 <!-- 待辦清單 -->
 <div style="max-width: 600px; margin: 0 auto; padding: 0 16px;">
   <mat-list>
-    <mat-list-item *ngFor="let todo of filteredTodos()" style="align-items: center;">
-      <mat-checkbox [checked]="todo.completed" (change)="toggleCompleted(todo)">
-      </mat-checkbox>
+    <ng-container *ngFor="let todo of filteredTodos()">
 
-      <span style="flex: 1; margin-left: 10px;" [style.text-decoration]="todo.completed ? 'line-through' : 'none'">
-        {{ todo.title }}
-      </span>
+      <mat-list-item style="align-items: flex-start; flex-direction: column;">
+        <div style="width: 100%; display: flex; align-items: center;">
+          <mat-checkbox [checked]="todo.completed" (change)="toggleCompleted(todo)"></mat-checkbox>
 
-      <button mat-icon-button color="accent" (click)="editTodo(todo)" aria-label="編輯待辦">
-        <mat-icon>edit</mat-icon>
-      </button>
-      <button mat-icon-button color="warn" (click)="deleteTodo(todo._id)" aria-label="刪除待辦">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </mat-list-item>
+          <span style="flex: 1; margin-left: 10px; word-break: break-word; min-width: 0;"
+            [style.text-decoration]="todo.completed ? 'line-through' : 'none'">
+            {{ todo.title }}
+          </span>
+
+          <button mat-icon-button color="accent" (click)="editTodo(todo)" aria-label="編輯待辦">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteTodo(todo._id)" aria-label="刪除待辦">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </mat-list-item>
+
+      <!-- 附件上傳獨立區塊 -->
+      <div style="padding: 0 16px 12px 52px;">
+        <app-file-upload [todoId]="todo._id" (uploaded)="loadTodos()"></app-file-upload>
+      </div>
+
+      <mat-divider></mat-divider>
+
+    </ng-container>
   </mat-list>
 </div>
