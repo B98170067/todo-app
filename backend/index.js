@@ -4,6 +4,7 @@ import cors from 'cors';
 import connectDB from './config/db.js';
 import authRoutes from './routes/auth.js';
 import todoRoutes from './routes/todos.js';
+import uploadRoutes from './routes/todoUpload.js';
 import { setupSwagger } from './swagger.js';
  
 // 使用 dotenv 套件根據 NODE_ENV 載入對應的 .env 檔
@@ -28,11 +29,13 @@ app.use(bodyParser.json());
 
 app.use('/auth', authRoutes);
 app.use('/todos', todoRoutes);
-
+app.use('/upload', uploadRoutes);
+ 
 // Swagger 文件
 setupSwagger(app);
 
 // 啟動伺服器
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
+    console.log(`Swagger UI is available at http://localhost:${port}/api-docs`);
 });
