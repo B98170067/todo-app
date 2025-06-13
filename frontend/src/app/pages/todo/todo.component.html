@@ -1,11 +1,11 @@
-<!-- 標題 -->
-<h1 style="text-align: center; margin-top: 24px; font-weight: 500;">📋 我的待辦清單</h1>
-
 <!-- 導覽列 -->
 <app-navbar />
 
+<!-- 標題 -->
+<h1 style="text-align: center; margin-top: 32px; font-weight: 600;">📋 我的待辦清單</h1>
+
 <!-- 輸入框區塊 -->
-<div style="max-width: 600px; margin: 0 auto 32px auto; padding: 0 16px;">
+<div style="max-width: 600px; margin: 24px auto; padding: 0 24px;">
   <mat-form-field appearance="fill" style="width: 100%;">
     <mat-label>新增待辦事項</mat-label>
     <input matInput [(ngModel)]="newTitle" (keyup.enter)="addTodo()" />
@@ -17,7 +17,7 @@
 </div>
 
 <!-- 篩選控制 -->
-<div style="max-width: 600px; margin: 0 auto 16px auto; text-align: right; padding: 0 16px;">
+<div style="max-width: 600px; margin: 0 auto 16px auto; text-align: right; padding: 0 24px;">
   <mat-button-toggle-group [(ngModel)]="filter" aria-label="Filter todos">
     <mat-button-toggle value="all">全部</mat-button-toggle>
     <mat-button-toggle value="active">未完成</mat-button-toggle>
@@ -26,19 +26,25 @@
 </div>
 
 <!-- 待辦清單 -->
-<div style="max-width: 600px; margin: 0 auto; padding: 0 16px;">
-  <mat-list>
-    <ng-container *ngFor="let todo of filteredTodos()">
+<div style="max-width: 600px; margin: 0 auto; padding: 0 24px;">
+  <ng-container *ngFor="let todo of filteredTodos()">
+    <mat-card style="margin-bottom: 16px;">
+      <mat-card-content style="display: flex; align-items: flex-start;">
+        <mat-checkbox [checked]="todo.completed" (change)="toggleCompleted(todo)" style="margin-top: 4px;"></mat-checkbox>
 
-      <mat-list-item style="align-items: flex-start; flex-direction: column;">
-        <div style="width: 100%; display: flex; align-items: center;">
-          <mat-checkbox [checked]="todo.completed" (change)="toggleCompleted(todo)"></mat-checkbox>
-
-          <span style="flex: 1; margin-left: 10px; word-break: break-word; min-width: 0;"
-            [style.text-decoration]="todo.completed ? 'line-through' : 'none'">
+        <div style="flex: 1; margin-left: 10px;">
+          <div [style.text-decoration]="todo.completed ? 'line-through' : 'none'" style="word-break: break-word;">
             {{ todo.title }}
-          </span>
+          </div>
 
+          <!-- 附件上傳 -->
+          <div style="margin-top: 8px;">
+            <app-file-upload [todoId]="todo._id" (uploaded)="loadTodos()"></app-file-upload>
+          </div>
+        </div>
+
+        <!-- 編輯 / 刪除 -->
+        <div>
           <button mat-icon-button color="accent" (click)="editTodo(todo)" aria-label="編輯待辦">
             <mat-icon>edit</mat-icon>
           </button>
@@ -46,15 +52,7 @@
             <mat-icon>delete</mat-icon>
           </button>
         </div>
-      </mat-list-item>
-
-      <!-- 附件上傳獨立區塊 -->
-      <div style="padding: 0 16px 12px 52px;">
-        <app-file-upload [todoId]="todo._id" (uploaded)="loadTodos()"></app-file-upload>
-      </div>
-
-      <mat-divider></mat-divider>
-
-    </ng-container>
-  </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
 </div>

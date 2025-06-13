@@ -1,16 +1,27 @@
-<div class="upload-container">
-  <input type="file" (change)="onFileSelected($event)" multiple>
-  <button mat-raised-button color="primary" (click)="uploadFiles()" [disabled]="!selectedFiles.length || uploading">
+<!-- 上傳區塊 -->
+<div style="display: flex; align-items: center; gap: 12px; flex-wrap: nowrap;">
+  <input type="file" (change)="onFileSelected($event)" multiple style="flex: 1 1 auto; max-width: 300px;">
+  <button mat-stroked-button color="primary" (click)="uploadFiles()" [disabled]="!selectedFiles.length || uploading">
     {{ uploading ? '上傳中...' : '上傳附件' }}
   </button>
 </div>
+<!-- <div style="display: flex; justify-content: space-between; align-items: center;">
+  <div style="flex: 1; max-width: 60%;">
+    <input type="file" (change)="onFileSelected($event)" multiple style="width: 100%;">
+  </div>
+  <button mat-stroked-button color="primary" (click)="uploadFiles()" [disabled]="!selectedFiles.length || uploading"
+    style="margin-left: 16px;">
+    {{ uploading ? '上傳中...' : '上傳附件' }}
+  </button>
+</div> -->
 
-<div class="attachment-list" *ngIf="attachments.length">
-  <h4 style="margin-top: 12px;">📎 附件</h4>
-  <ul>
-    <li *ngFor="let attachment of attachments">
-      <a href="#" (click)="downloadFile($event, attachment)">{{ attachment }}</a>
-      <button mat-button color="warn" (click)="deleteAttachment(attachment)">刪除</button>
-    </li>
-  </ul>
+<!-- 附件清單 -->
+<div *ngIf="attachments.length" style="margin-top: 8px;">
+  <div style="font-weight: 500; margin-bottom: 4px;">📎 附件</div>
+  <div *ngFor="let attachment of attachments" style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+    <a href="#" (click)="downloadFile($event, attachment)" style="word-break: break-word;">
+      {{ attachment }}
+    </a>
+    <button mat-button color="warn" (click)="deleteAttachment(attachment)">刪除</button>
+  </div>
 </div>

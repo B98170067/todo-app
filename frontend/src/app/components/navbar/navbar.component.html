@@ -1,10 +1,10 @@
 <mat-toolbar color="primary" style="margin-bottom: 24px;">
   <span style="display: flex; align-items: center; flex: 1;">
     <mat-icon>check_circle</mat-icon>
-    <a mat-button routerLink="/" style="color: white; font-weight: 500;">首頁</a>
+    <a mat-button routerLink="/" style="font-weight: 500;">首頁</a>
   </span>
 
-  <span *ngIf="user" style="margin-right: 16px; color: white;">👤 {{ user }}</span>
+  <span *ngIf="user" style="margin-right: 16px;">👤 {{ user }}</span>
   <button mat-stroked-button color="accent" *ngIf="user" (click)="logout()">登出</button>
   <button mat-stroked-button color="accent" *ngIf="!user" routerLink="/login">登入</button>
 </mat-toolbar>
