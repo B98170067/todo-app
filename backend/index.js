@@ -7,15 +7,8 @@ import todoRoutes from './routes/todos.js';
 import uploadRoutes from './routes/todoUpload.js';
 import { setupSwagger } from './swagger.js';
  
-// 使用 dotenv 套件根據 NODE_ENV 載入對應的 .env 檔
-import dotenv from 'dotenv';
-import { fileURLToPath } from 'url';
-import path from 'path';
-// ESM 環境中模擬 __dirname
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const env = process.env.NODE_ENV || 'development';
-dotenv.config({ path: path.resolve(__dirname, `.env.${env}`) });
+import dotenvFlow from 'dotenv-flow';
+dotenvFlow.config(); // 自動根據 NODE_ENV 載入對應 .env 檔
 
 const app = express();
 const port = process.env.PORT || 3000;
