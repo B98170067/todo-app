@@ -4,7 +4,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "start:lab": "ng serve --host 0.0.0.0 --allowed-hosts gcedemotestsites.servegame.com --configuration laboratory",
+    "build": "ng build  --configuration=production --output-path=dist/prod",
+    "build:lab": "ng build  --configuration=laboratory --output-path=dist/lab",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

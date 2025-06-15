@@ -1,0 +1,69 @@
+server {
+    server_name gcedemotestsites.servegame.com;
+
+    root /home/b98170067/todo-app/frontend/frontend/browser;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /api/ {
+        proxy_pass http://localhost:3000/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/gcedemotestsites.servegame.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/gcedemotestsites.servegame.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+
+server {
+    listen 8080;
+    server_name gcedemotestsites.servegame.com;
+
+    location / {
+        proxy_pass http://localhost:4200/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+
+        proxy_intercept_errors on;
+        error_page 502 503 504 =502 /dev-error.html;
+    }
+
+    location /api-lab/ {
+        proxy_pass http://localhost:3001/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # 可選錯誤頁（沒有 ng serve 時會看到這個）
+    location = /dev-error.html {
+        default_type text/html;
+        return 200 '<h1 style="color:red;">ng serve 尚未啟動</h1>';
+    }
+}
+
+server {
+    if ($host = gcedemotestsites.servegame.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name gcedemotestsites.servegame.com;
+    return 404; # managed by Certbot
+}

@@ -49,8 +49,29 @@
               "outputHashing": "all",
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "replace": "src/app/environments/environment.ts",
+                  "with": "src/app/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "laboratory": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/app/environments/environment.ts",
+                  "with": "src/app/environments/environment.lab.ts"
                 }
               ]
             },
@@ -70,6 +91,9 @@
             },
             "development": {
               "buildTarget": "frontend:build:development"
+            },
+            "laboratory": {
+              "buildTarget": "frontend:build:laboratory"
             }
           },
           "defaultConfiguration": "development"
@@ -100,5 +124,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
