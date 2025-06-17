@@ -6,7 +6,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development node index.js",
-    "test": "cross-env NODE_ENV=test node index.js"
+    "test": "cross-env NODE_ENV=test node index.js",
+    "lab": "cross-env NODE_ENV=development PORT=3001 nodemon index.js"
   },
   "keywords": [],
   "author": "",
